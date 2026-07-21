@@ -1,0 +1,13 @@
+{
+  "id": "mcp-no-version",
+  "name": "Missing Version",
+  "description": "This manifest is missing the required version field.",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  }
+}

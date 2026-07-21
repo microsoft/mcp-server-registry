@@ -1,0 +1,14 @@
+{
+  "id": "mcp-no-links",
+  "name": "Missing Links",
+  "description": "This manifest is missing the required links field.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  }
+}

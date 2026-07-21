@@ -1,0 +1,54 @@
+name: Validate PR
+
+# Runs on every PR that touches server manifests, the schema, or the scripts.
+# Operates only on public inputs (no internal credentials) - it validates each
+# manifest against the schema and checks folder/icon rules. The privileged
+# build/push/catalog steps run on merge in an internal pipeline (in the
+# mcp-service repo), which holds the ACR/storage credentials - never in this
+# public repo's CI.
+
+on:
+  pull_request:
+    paths:
+      - 'servers/**'
+      - 'schemas/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/validate-pr.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-manifests:
+    # Pin the runner image so the preinstalled PowerShell stays deterministic;
+    # ubuntu-latest can move to a new image (and a different pwsh) without notice.
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify PowerShell version
+        shell: pwsh
+        run: |
+          # Test-Json draft-07 validation requires PowerShell 7.4+. Fail fast with a
+          # clear message if the runner image ever drifts to an older pwsh, instead
+          # of failing later with a confusing schema error.
+          $required = [version]'7.4'
+          if ($PSVersionTable.PSVersion -lt $required) {
+            throw "PowerShell $required+ is required (Test-Json draft-07 support); runner has $($PSVersionTable.PSVersion)."
+          }
+          Write-Host "PowerShell $($PSVersionTable.PSVersion) meets the $required+ requirement."
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          $config = New-PesterConfiguration
+          $config.Run.Path = './tests/validate-manifest.Tests.ps1'
+          $config.Output.Verbosity = 'Detailed'
+          $config.Run.Exit = $true
+          Invoke-Pester -Configuration $config
+
+      - name: Validate all manifests
+        shell: pwsh
+        run: ./scripts/validate-manifest.ps1

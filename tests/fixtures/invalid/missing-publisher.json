@@ -1,0 +1,11 @@
+{
+  "id": "mcp-no-publisher",
+  "name": "Missing Publisher",
+  "description": "This manifest is missing the required publisher field.",
+  "version": "1.0.0",
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  }
+}

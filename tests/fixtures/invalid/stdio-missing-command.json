@@ -1,0 +1,17 @@
+{
+  "id": "mcp-stdio-no-cmd",
+  "name": "Stdio Missing Command",
+  "description": "Container with stdio transport but no command field.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "transport": "stdio"
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  }
+}

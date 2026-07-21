@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-cosmosdb",
+  "name": "CosmosDB MCP Server",
+  "description": "Connect AI agents to Azure Cosmos DB.",
+  "version": "1.2.3",
+  "publisher": {
+    "name": "Contoso Inc.",
+    "url": "https://contoso.com"
+  },
+  "links": {
+    "documentation": "https://github.com/contoso/mcp-cosmosdb#readme",
+    "source": "https://github.com/contoso/mcp-cosmosdb",
+    "support": "https://github.com/contoso/mcp-cosmosdb/issues"
+  },
+  "source": {
+    "type": "github",
+    "repo": "https://github.com/contoso/mcp-cosmosdb",
+    "commit": "abcdef1234567890abcdef1234567890abcdef12",
+    "dockerfile": "./Dockerfile",
+    "targetPort": 8080
+  },
+  "authentication": {
+    "methods": ["managed-identity", "connection-string"],
+    "default": "managed-identity",
+    "connectionStringVariable": "COSMOSDB_CONNECTION_STRING"
+  },
+  "configuration": [
+    {
+      "name": "DATABASE_NAME",
+      "description": "Name of the Cosmos DB database.",
+      "isRequired": true
+    }
+  ],
+  "capabilities": ["tools", "resources"],
+  "tags": ["database", "cosmosdb", "azure"]
+}

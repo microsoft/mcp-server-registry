@@ -1,0 +1,13 @@
+{
+  "id": "mcp-unknown-source",
+  "name": "Unknown Source Type",
+  "description": "Source type is not container or github.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "npm",
+    "package": "@test/mcp-server"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "mcp-minimal",
+  "name": "Minimal Server",
+  "description": "Minimal valid manifest with only required fields.",
+  "version": "0.1.0",
+  "publisher": {
+    "name": "Test Publisher"
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/minimal@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  }
+}

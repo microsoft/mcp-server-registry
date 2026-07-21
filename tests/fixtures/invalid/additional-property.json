@@ -1,0 +1,18 @@
+{
+  "id": "mcp-extra-field",
+  "name": "Extra Field",
+  "description": "Has an additionalProperty not in the schema.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  },
+  "notInSchema": true
+}

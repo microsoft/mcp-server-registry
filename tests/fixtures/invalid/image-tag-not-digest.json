@@ -1,0 +1,14 @@
+{
+  "id": "mcp-bad-image",
+  "name": "Bad Image Ref",
+  "description": "Image uses a tag instead of sha256 digest.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv:latest",
+    "targetPort": 8080
+  }
+}
