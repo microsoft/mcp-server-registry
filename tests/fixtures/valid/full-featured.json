@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-full-featured",
+  "name": "Full Featured MCP Server",
+  "description": "A manifest exercising every optional field.",
+  "longDescription": "This is a longer description with **Markdown** support.\n\nIt can span multiple paragraphs.",
+  "icon": "icon.svg",
+  "version": "3.0.1",
+  "recalledVersions": ["1.0.0", "2.0.0"],
+  "publisher": {
+    "name": "Full Corp",
+    "url": "https://fullcorp.example.com"
+  },
+  "links": {
+    "documentation": "https://docs.example.com",
+    "source": "https://github.com/fullcorp/mcp-full",
+    "support": "https://github.com/fullcorp/mcp-full/issues",
+    "license": "https://github.com/fullcorp/mcp-full/blob/main/LICENSE",
+    "changelog": "https://github.com/fullcorp/mcp-full/blob/main/CHANGELOG.md"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/fullcorp/mcp-full@sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "transport": "http",
+    "targetPort": 9090,
+    "mcpServerRoute": "/mcp/v1"
+  },
+  "authentication": {
+    "methods": ["connection-string"],
+    "connectionStringVariable": "MY_CONN_STRING"
+  },
+  "configuration": [
+    {
+      "name": "API_KEY",
+      "description": "API key for the upstream service.",
+      "isRequired": true,
+      "isSecret": true,
+      "format": "string"
+    },
+    {
+      "name": "MAX_RESULTS",
+      "description": "Maximum results per query.",
+      "isRequired": false,
+      "isSecret": false,
+      "default": "50",
+      "format": "number"
+    }
+  ],
+  "capabilities": ["tools", "resources", "prompts"],
+  "tags": ["full", "featured", "test"]
+}

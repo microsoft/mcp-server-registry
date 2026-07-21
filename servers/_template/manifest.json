@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-my-server",
+  "name": "My MCP Server",
+  "description": "A short description of what this server does (max 256 chars).",
+  "icon": "icon.png",
+  "longDescription": "A longer description with more detail. Supports **Markdown**.\n\nExplain what tools/resources the server exposes, what data sources it connects to, and any prerequisites.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Your Name or Organization",
+    "url": "https://github.com/your-org"
+  },
+  "links": {
+    "documentation": "https://github.com/your-org/mcp-my-server#readme",
+    "source": "https://github.com/your-org/mcp-my-server",
+    "support": "https://github.com/your-org/mcp-my-server/issues",
+    "license": "https://github.com/your-org/mcp-my-server/blob/main/LICENSE"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/your-org/mcp-my-server@sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+    "targetPort": 3000,
+    "mcpServerRoute": "/"
+  },
+  "authentication": {
+    "methods": ["managed-identity", "connection-string"],
+    "default": "managed-identity",
+    "connectionStringVariable": "CONNECTION_STRING"
+  },
+  "configuration": [
+    {
+      "name": "MAX_RESULTS",
+      "description": "Maximum number of results to return per query.",
+      "isRequired": false,
+      "isSecret": false,
+      "default": "100",
+      "format": "number"
+    }
+  ],
+  "capabilities": ["tools", "resources"],
+  "tags": ["database", "query"]
+}

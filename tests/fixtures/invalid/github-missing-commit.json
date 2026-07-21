@@ -1,0 +1,15 @@
+{
+  "id": "mcp-github-no-commit",
+  "name": "GitHub Missing Commit",
+  "description": "GitHub source type missing required commit field.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "github",
+    "repo": "https://github.com/org/repo",
+    "dockerfile": "./Dockerfile",
+    "targetPort": 8080
+  }
+}

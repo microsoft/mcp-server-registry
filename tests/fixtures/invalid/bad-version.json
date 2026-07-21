@@ -1,0 +1,14 @@
+{
+  "id": "mcp-bad-version",
+  "name": "Bad Version",
+  "description": "Version does not match semver pattern.",
+  "version": "1.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-playwright",
+  "name": "Playwright MCP Server",
+  "description": "Browser automation for AI agents via MCP.",
+  "version": "2.1.0",
+  "publisher": {
+    "name": "Microsoft",
+    "url": "https://github.com/microsoft"
+  },
+  "links": {
+    "documentation": "https://github.com/microsoft/playwright-mcp#readme"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/microsoft/mcp-playwright@sha256:abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+    "transport": "stdio",
+    "command": "node dist/index.js"
+  },
+  "capabilities": ["tools"],
+  "tags": ["browser", "automation"]
+}

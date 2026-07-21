@@ -1,0 +1,17 @@
+{
+  "id": "mcp-bad-url",
+  "name": "Bad URL",
+  "description": "Links documentation is not a valid https URL.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  },
+  "links": {
+    "documentation": "not-a-url"
+  }
+}

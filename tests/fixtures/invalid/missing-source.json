@@ -1,0 +1,9 @@
+{
+  "id": "mcp-no-source",
+  "name": "Missing Source",
+  "description": "This manifest is missing the required source field.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  }
+}

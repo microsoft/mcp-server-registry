@@ -1,0 +1,14 @@
+{
+  "id": "mcp-no-pub-name",
+  "name": "Missing Publisher Name",
+  "description": "Publisher object is missing the required name field.",
+  "version": "1.0.0",
+  "publisher": {
+    "url": "https://example.com"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  }
+}

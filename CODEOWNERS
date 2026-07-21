@@ -1,0 +1,16 @@
+# CODEOWNERS - Hosted MCP Server Registry
+#
+# The Azure MCP Service team must approve every change to the registry. The
+# schema, the validation scripts, and the workflows are especially sensitive
+# and are owned exclusively by the team. In V1, onboarding is limited to
+# first-party (Microsoft) servers, so this review IS the trust gate: every
+# manifest PR requires team approval before it can merge.
+
+# Default owner for everything in the repo.
+*                               @microsoft/azure-mcp-service-devs
+
+# Privileged, team-only files.
+/schemas/                       @microsoft/azure-mcp-service-devs
+/scripts/                       @microsoft/azure-mcp-service-devs
+/.github/                       @microsoft/azure-mcp-service-devs
+/CODEOWNERS                     @microsoft/azure-mcp-service-devs

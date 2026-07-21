@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-sql-server",
+  "name": "SQL MCP Server",
+  "description": "Enable AI agents to safely interact with SQL databases.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Microsoft"
+  },
+  "links": {
+    "documentation": "https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/overview"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/microsoft/mcp-sql@sha256:a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+    "targetPort": 3000
+  }
+}

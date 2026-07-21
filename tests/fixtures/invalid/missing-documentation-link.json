@@ -1,0 +1,17 @@
+{
+  "id": "mcp-no-docs-link",
+  "name": "Missing Documentation Link",
+  "description": "Links object is missing required documentation field.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  },
+  "links": {
+    "source": "https://github.com/test/repo"
+  }
+}

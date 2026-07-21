@@ -1,0 +1,16 @@
+{
+  "id": "mcp-no-targetport",
+  "name": "Missing targetPort",
+  "description": "Container with http transport missing required targetPort.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/srv@sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  }
+}
