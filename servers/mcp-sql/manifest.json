@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-sql",
+  "name": "SQL MCP Server",
+  "description": "Enable AI agents to safely interact with SQL databases using Model Context Protocol.",
+  "longDescription": "The SQL MCP Server packages [Data API Builder](https://github.com/Azure/data-api-builder) and exposes a SQL database over the Model Context Protocol, letting AI agents query and modify data through generated tools for reading, creating, updating, deleting, and aggregating records and executing stored procedures.\n\nYou bring your own **Data API Builder configuration** (`dab-config.json`), which declares the entities — tables, views, and stored procedures — to expose along with the permissions on each; only the entities you configure are reachable. How Data API Builder connects to your database is defined in your configuration. Data API Builder always connects using a connection string — whether that string authenticates with a managed identity or a username and password. When a connection string is supplied at deployment it is exposed as the `MSSQL_CONNECTION_STRING` environment variable (see `authentication`), which your config can reference with Data API Builder's `@env('MSSQL_CONNECTION_STRING')` syntax to keep the value out of the file, or you can set the connection string directly in your config. No connection string value is stored in this manifest.",
+  "version": "0.1.0",
+  "publisher": {
+    "name": "Microsoft"
+  },
+  "links": {
+    "documentation": "https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/overview",
+    "source": "https://github.com/Azure/data-api-builder",
+    "support": "https://github.com/Azure/data-api-builder/issues",
+    "license": "https://github.com/Azure/data-api-builder/blob/main/LICENSE.txt"
+  },
+  "source": {
+    "type": "local",
+    "dockerfile": "./Dockerfile",
+    "buildContext": ".",
+    "transport": "http",
+    "targetPort": 5000,
+    "mcpServerRoute": "/mcp"
+  },
+  "authentication": {
+    "methods": ["managed-identity", "connection-string"],
+    "default": "managed-identity",
+    "connectionStringVariable": "MSSQL_CONNECTION_STRING"
+  },
+  "configuration": [
+    {
+      "name": "configFile",
+      "type": "file",
+      "description": "Data API Builder configuration that defines the database entities exposed over MCP.",
+      "isRequired": true,
+      "targetDirectory": "/App",
+      "fileName": "dab-config.json"
+    }
+  ],
+  "capabilities": ["tools"],
+  "tags": ["sql", "database", "data-api-builder", "azure"]
+}
