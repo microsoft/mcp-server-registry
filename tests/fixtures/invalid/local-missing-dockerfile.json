@@ -1,0 +1,17 @@
+{
+  "id": "mcp-local-no-dockerfile",
+  "name": "Local Missing Dockerfile",
+  "description": "Local source type missing required dockerfile field.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test"
+  },
+  "links": {
+    "documentation": "https://github.com/org/repo#readme"
+  },
+  "source": {
+    "type": "local",
+    "buildContext": ".",
+    "targetPort": 5000
+  }
+}

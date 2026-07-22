@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-local-build",
+  "name": "Local Build MCP Server",
+  "description": "Built from a Dockerfile bundled in this registry repository.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Microsoft"
+  },
+  "links": {
+    "documentation": "https://github.com/microsoft/mcp-server-registry#readme"
+  },
+  "source": {
+    "type": "local",
+    "dockerfile": "./Dockerfile",
+    "buildContext": ".",
+    "targetPort": 5000,
+    "mcpServerRoute": "/mcp"
+  },
+  "capabilities": ["tools", "resources"],
+  "tags": ["local", "sample"]
+}

@@ -77,16 +77,18 @@ ready-to-copy starting point.
 
 ### Where your server comes from
 
-The `source` block declares your server one of two ways — pick whichever you
-already have:
+The `source` block declares your server one of three ways — pick whichever
+already fits:
 
 | `source.type` | You provide | Good when |
 |---|---|---|
 | **`container`** | A pre-built image pinned by digest (`name@sha256:…`) | You already publish an image (GHCR, Docker Hub, MCR, …). |
 | **`github`** | A repo URL, a Dockerfile path, and a commit SHA | You'd rather the image be built from your source. |
+| **`local`** | A Dockerfile committed alongside this manifest in your server folder | You have no published image or separate repo — a small build or wrapper lives here. |
 
-Either way the source is pinned to an **exact, immutable version** (a digest or a
-commit SHA) — the schema does not accept mutable tags or branches.
+Either way the source is pinned to an **exact, immutable version**: `container`
+by digest, `github` by commit SHA, and `local` by the manifest's own commit —
+the schema does not accept mutable tags or branches.
 
 ### HTTP or STDIO transport
 

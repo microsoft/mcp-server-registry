@@ -443,6 +443,29 @@ Describe 'End-to-end - validate-manifest.ps1 script' {
         Remove-Item -Recurse -Force $serverDir
     }
 
+    It 'exits 0 for a valid local source (exercises localSource resolution)' {
+        $serverDir = Join-Path $script:E2eServers 'mcp-local-build'
+        New-Item -ItemType Directory -Path $serverDir -Force | Out-Null
+        Copy-Item (Join-Path $script:FixturesValid 'local-source.json') (Join-Path $serverDir 'manifest.json')
+
+        $output = & pwsh -NoProfile -File (Join-Path $script:E2eRoot 'scripts' 'validate-manifest.ps1') -ServerId mcp-local-build 2>&1
+        $LASTEXITCODE | Should -Be 0 -Because "a well-formed local source must pass end-to-end ($output)"
+
+        Remove-Item -Recurse -Force $serverDir
+    }
+
+    It 'exits 1 and flags missing dockerfile for local source (exercises localSource resolution)' {
+        $serverDir = Join-Path $script:E2eServers 'mcp-local-no-dockerfile'
+        New-Item -ItemType Directory -Path $serverDir -Force | Out-Null
+        Copy-Item (Join-Path $script:FixturesInvalid 'local-missing-dockerfile.json') (Join-Path $serverDir 'manifest.json')
+
+        $output = & pwsh -NoProfile -File (Join-Path $script:E2eRoot 'scripts' 'validate-manifest.ps1') -ServerId mcp-local-no-dockerfile 2>&1
+        $LASTEXITCODE | Should -Be 1 -Because "local source requires 'dockerfile' ($output)"
+        ($output -join "`n") | Should -Match 'dockerfile' -Because "the resolved schema must still require 'dockerfile' for local source"
+
+        Remove-Item -Recurse -Force $serverDir
+    }
+
     It 'exits 0 for a valid stdio container source (exercises stdio command path)' {
         $serverDir = Join-Path $script:E2eServers 'mcp-playwright'
         New-Item -ItemType Directory -Path $serverDir -Force | Out-Null
