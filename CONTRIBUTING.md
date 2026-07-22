@@ -29,7 +29,9 @@ merge your PR.
    icon (`icon.svg` or `icon.png`) in the same folder.
    - `id` must equal the folder name, be lowercase, and be unique.
    - Pin your source to an exact version: an image **digest** (`name@sha256:…`)
-     for a `container` source, or a commit **SHA** for a `github` source.
+     for a `container` source, a commit **SHA** for a `github` source, or — for a
+     `local` source — a Dockerfile committed in your server folder (built from the
+     manifest's own commit).
    - See [`schemas/manifest.schema.json`](schemas/manifest.schema.json) for the
      full field reference. (Worked example manifests will be added in a
      follow-up PR once the validation workflow is on `main`.)

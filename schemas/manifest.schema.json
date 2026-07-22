@@ -120,8 +120,8 @@
       "description": "How the MCP server is delivered. Discriminated by 'type'. The pipeline always produces an HTTP image for ADC; when transport is 'stdio', the pipeline wraps the server with the McpTransportGateway tool.",
       "properties": {
         "type": {
-          "enum": ["container", "github"],
-          "description": "Delivery mechanism: 'container' for a pre-built, digest-pinned image, or 'github' to build the image from source at a pinned commit."
+          "enum": ["container", "github", "local"],
+          "description": "Delivery mechanism: 'container' for a pre-built, digest-pinned image, 'github' to build the image from an external repo at a pinned commit, or 'local' to build the image from a Dockerfile bundled in this manifest's directory in this registry repository."
         }
       },
       "allOf": [
@@ -138,6 +138,13 @@
             "required": ["type"]
           },
           "then": { "$ref": "#/definitions/githubSource" }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "local" } },
+            "required": ["type"]
+          },
+          "then": { "$ref": "#/definitions/localSource" }
         }
       ]
     },
@@ -313,6 +320,53 @@
           "type": "string",
           "description": "Path to the Docker build context relative to the repo root. Defaults to the repo root.",
           "examples": [".", "./src"]
+        },
+        "transport": {
+          "type": "string",
+          "enum": ["http", "stdio"],
+          "default": "http",
+          "description": "MCP transport the built image serves. When 'stdio', the pipeline wraps the built image with McpTransportGateway to expose HTTP."
+        },
+        "command": {
+          "type": "string",
+          "description": "Command that starts the STDIO MCP server inside the built image. Required when transport is 'stdio'.",
+          "examples": ["my-mcp-server --some-flag", "node dist/index.js"]
+        },
+        "targetPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Port the MCP server listens on inside the built container. Required for http; ignored for stdio (the gateway sets port 8080)."
+        },
+        "mcpServerRoute": {
+          "type": "string",
+          "pattern": "^/",
+          "default": "/",
+          "description": "HTTP path prefix where the MCP SSE/Streamable HTTP endpoint is served. Ignored for stdio (the gateway sets route /mcp)."
+        }
+      },
+      "if": {
+        "properties": { "transport": { "const": "stdio" } },
+        "required": ["transport"]
+      },
+      "then": { "required": ["command"] },
+      "else": { "required": ["targetPort"] }
+    },
+    "localSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "dockerfile"],
+      "properties": {
+        "type": { "const": "local" },
+        "dockerfile": {
+          "type": "string",
+          "description": "Path to the Dockerfile, relative to this manifest's own directory (servers/{id}/), where it must be committed alongside this manifest. The image is built from the manifest's own commit - no external repository is cloned.",
+          "examples": ["./Dockerfile", "./docker/Dockerfile"]
+        },
+        "buildContext": {
+          "type": "string",
+          "description": "Path to the Docker build context, relative to this manifest's own directory (servers/{id}/). Defaults to the manifest directory.",
+          "examples": [".", "./build"]
         },
         "transport": {
           "type": "string",

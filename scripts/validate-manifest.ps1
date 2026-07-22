@@ -74,7 +74,7 @@ function Resolve-EffectiveSchema {
     param(
         [Parameter(Mandatory)] [string] $SchemaPath,
         [Parameter(Mandatory)] $Manifest,
-        [Parameter(Mandatory)] [ValidateSet('containerSource', 'githubSource')] [string] $DefName
+        [Parameter(Mandatory)] [ValidateSet('containerSource', 'githubSource', 'localSource')] [string] $DefName
     )
     $schema = Get-Content -Raw $SchemaPath | ConvertFrom-Json -Depth 100
 
@@ -144,15 +144,15 @@ foreach ($id in $ids) {
     $sourceType = if ($hasSource -and ($manifest.source.PSObject.Properties.Name -contains 'type')) {
         [string]$manifest.source.type
     } else { $null }
-    $defName = switch ($sourceType) { 'container' { 'containerSource' } 'github' { 'githubSource' } default { $null } }
+    $defName = switch ($sourceType) { 'container' { 'containerSource' } 'github' { 'githubSource' } 'local' { 'localSource' } default { $null } }
 
     # A present-but-undiscriminatable source is reported directly (one clean
     # message) rather than letting the branch assertions cascade into noise.
     if ($hasSource -and -not $defName) {
         if (-not $sourceType) {
-            $failures.Add("${id}: source.type is required (expected 'container' or 'github')")
+            $failures.Add("${id}: source.type is required (expected 'container', 'github', or 'local')")
         } else {
-            $failures.Add("${id}: source.type '$sourceType' is not supported (expected 'container' or 'github')")
+            $failures.Add("${id}: source.type '$sourceType' is not supported (expected 'container', 'github', or 'local')")
         }
         continue
     }
