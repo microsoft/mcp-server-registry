@@ -1,0 +1,24 @@
+{
+  "id": "mcp-bad-config-field",
+  "name": "Bad Config Field",
+  "description": "A configuration input using a field that is not part of the schema.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test Publisher"
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/x@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  },
+  "configuration": [
+    {
+      "name": "API_KEY",
+      "description": "Uses the removed 'format' field.",
+      "format": "string"
+    }
+  ]
+}

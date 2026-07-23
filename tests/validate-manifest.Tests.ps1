@@ -122,6 +122,30 @@ Describe 'Schema validation - specific error cases' {
         $errs.Count | Should -BeGreaterThan 0
         ($errs | Where-Object { $_.Exception.Message -match 'connectionStringVariable' -or $_.Exception.Message -match 'subschema' }) | Should -Not -BeNullOrEmpty
     }
+
+    # Configuration inputs are discriminated by 'type': a 'file' input requires
+    # targetDirectory + fileName, an 'enum' input requires allowedValues, and any
+    # non-file input's name must be a valid UPPER_SNAKE_CASE environment variable.
+    It 'rejects a file configuration input without fileName' {
+        $json = Get-Content -Raw (Join-Path $script:FixturesInvalid 'config-file-missing-filename.json')
+        $json | Test-Json -SchemaFile $script:SchemaPath -ErrorVariable errs -ErrorAction SilentlyContinue | Out-Null
+        $errs.Count | Should -BeGreaterThan 0
+        ($errs | Where-Object { $_.Exception.Message -match 'fileName' }) | Should -Not -BeNullOrEmpty
+    }
+
+    It 'rejects an enum configuration input without allowedValues' {
+        $json = Get-Content -Raw (Join-Path $script:FixturesInvalid 'config-enum-missing-allowedvalues.json')
+        $json | Test-Json -SchemaFile $script:SchemaPath -ErrorVariable errs -ErrorAction SilentlyContinue | Out-Null
+        $errs.Count | Should -BeGreaterThan 0
+        ($errs | Where-Object { $_.Exception.Message -match 'allowedValues' }) | Should -Not -BeNullOrEmpty
+    }
+
+    It 'rejects a non-file configuration input with a non-UPPER_SNAKE name' {
+        $json = Get-Content -Raw (Join-Path $script:FixturesInvalid 'config-env-lowercase-name.json')
+        $json | Test-Json -SchemaFile $script:SchemaPath -ErrorVariable errs -ErrorAction SilentlyContinue | Out-Null
+        $errs.Count | Should -BeGreaterThan 0
+        ($errs | Where-Object { $_.Exception.Message -match '/name' -or $_.Exception.Message -match 'regular expression' }) | Should -Not -BeNullOrEmpty
+    }
 }
 
 # --------------------------------------------------------------------------
@@ -462,6 +486,59 @@ Describe 'End-to-end - validate-manifest.ps1 script' {
         $output = & pwsh -NoProfile -File (Join-Path $script:E2eRoot 'scripts' 'validate-manifest.ps1') -ServerId mcp-local-no-dockerfile 2>&1
         $LASTEXITCODE | Should -Be 1 -Because "local source requires 'dockerfile' ($output)"
         ($output -join "`n") | Should -Match 'dockerfile' -Because "the resolved schema must still require 'dockerfile' for local source"
+
+        Remove-Item -Recurse -Force $serverDir
+    }
+
+    # ----------------------------------------------------------------------
+    # Configuration-input coverage THROUGH the script. These exercise
+    # Resolve-ConfigurationSchema - the runtime resolution of each 'type'-
+    # discriminated input to its concrete shape (env var vs file, enum requires
+    # allowedValues). Like the source-conditional cases above, they guard the
+    # schema<->script coupling: each asserts on the message so the RIGHT rule fires.
+    It 'exits 0 for a manifest with valid configuration inputs (exercises config resolution)' {
+        $serverDir = Join-Path $script:E2eServers 'mcp-config-inputs'
+        New-Item -ItemType Directory -Path $serverDir -Force | Out-Null
+        Copy-Item (Join-Path $script:FixturesValid 'config-inputs.json') (Join-Path $serverDir 'manifest.json')
+
+        $output = & pwsh -NoProfile -File (Join-Path $script:E2eRoot 'scripts' 'validate-manifest.ps1') -ServerId mcp-config-inputs 2>&1
+        $LASTEXITCODE | Should -Be 0 -Because "well-formed enum/secret/int/bool/file inputs must pass end-to-end ($output)"
+
+        Remove-Item -Recurse -Force $serverDir
+    }
+
+    It 'exits 1 and flags a file input missing fileName (exercises config resolution)' {
+        $serverDir = Join-Path $script:E2eServers 'mcp-bad-file-input'
+        New-Item -ItemType Directory -Path $serverDir -Force | Out-Null
+        Copy-Item (Join-Path $script:FixturesInvalid 'config-file-missing-filename.json') (Join-Path $serverDir 'manifest.json')
+
+        $output = & pwsh -NoProfile -File (Join-Path $script:E2eRoot 'scripts' 'validate-manifest.ps1') -ServerId mcp-bad-file-input 2>&1
+        $LASTEXITCODE | Should -Be 1 -Because "a file input requires fileName ($output)"
+        ($output -join "`n") | Should -Match 'fileName' -Because "the resolved schema must require fileName for a file input"
+
+        Remove-Item -Recurse -Force $serverDir
+    }
+
+    It 'exits 1 and flags an enum input missing allowedValues (exercises config resolution)' {
+        $serverDir = Join-Path $script:E2eServers 'mcp-bad-enum-input'
+        New-Item -ItemType Directory -Path $serverDir -Force | Out-Null
+        Copy-Item (Join-Path $script:FixturesInvalid 'config-enum-missing-allowedvalues.json') (Join-Path $serverDir 'manifest.json')
+
+        $output = & pwsh -NoProfile -File (Join-Path $script:E2eRoot 'scripts' 'validate-manifest.ps1') -ServerId mcp-bad-enum-input 2>&1
+        $LASTEXITCODE | Should -Be 1 -Because "an enum input requires allowedValues ($output)"
+        ($output -join "`n") | Should -Match 'allowedValues' -Because "the resolved schema must require allowedValues for an enum input"
+
+        Remove-Item -Recurse -Force $serverDir
+    }
+
+    It 'exits 1 and flags a non-file input with an invalid env var name (exercises config resolution)' {
+        $serverDir = Join-Path $script:E2eServers 'mcp-bad-env-name'
+        New-Item -ItemType Directory -Path $serverDir -Force | Out-Null
+        Copy-Item (Join-Path $script:FixturesInvalid 'config-env-lowercase-name.json') (Join-Path $serverDir 'manifest.json')
+
+        $output = & pwsh -NoProfile -File (Join-Path $script:E2eRoot 'scripts' 'validate-manifest.ps1') -ServerId mcp-bad-env-name 2>&1
+        $LASTEXITCODE | Should -Be 1 -Because "a non-file input name must be UPPER_SNAKE_CASE ($output)"
+        ($output -join "`n") | Should -Match 'name' -Because "the resolved schema must reject a non-UPPER_SNAKE name for a non-file input"
 
         Remove-Item -Recurse -Force $serverDir
     }

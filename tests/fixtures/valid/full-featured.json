@@ -32,18 +32,31 @@
   "configuration": [
     {
       "name": "API_KEY",
+      "type": "secret",
       "description": "API key for the upstream service.",
-      "isRequired": true,
-      "isSecret": true,
-      "format": "string"
+      "isRequired": true
     },
     {
       "name": "MAX_RESULTS",
+      "type": "int",
       "description": "Maximum results per query.",
       "isRequired": false,
-      "isSecret": false,
-      "default": "50",
-      "format": "number"
+      "default": "50"
+    },
+    {
+      "name": "LOG_LEVEL",
+      "type": "enum",
+      "description": "Logging verbosity.",
+      "allowedValues": ["debug", "info", "warn", "error"],
+      "default": "info"
+    },
+    {
+      "name": "configFile",
+      "type": "file",
+      "description": "Server configuration file mounted into the container.",
+      "isRequired": true,
+      "targetDirectory": "/App",
+      "fileName": "config.json"
     }
   ],
   "capabilities": ["tools", "resources", "prompts"],
