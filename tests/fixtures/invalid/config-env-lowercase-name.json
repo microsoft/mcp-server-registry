@@ -1,0 +1,24 @@
+{
+  "id": "mcp-bad-env-name",
+  "name": "Bad Env Name",
+  "description": "A non-file configuration input whose name is not a valid environment variable.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test Publisher"
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/x@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  },
+  "configuration": [
+    {
+      "name": "logLevel",
+      "type": "string",
+      "description": "Environment variable name must be UPPER_SNAKE_CASE."
+    }
+  ]
+}

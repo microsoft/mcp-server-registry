@@ -30,11 +30,24 @@
   "configuration": [
     {
       "name": "MAX_RESULTS",
+      "type": "int",
       "description": "Maximum number of results to return per query.",
       "isRequired": false,
-      "isSecret": false,
-      "default": "100",
-      "format": "number"
+      "default": "100"
+    },
+    {
+      "name": "API_KEY",
+      "type": "secret",
+      "description": "Secret injected as an environment variable and masked in the portal.",
+      "isRequired": false
+    },
+    {
+      "name": "configFile",
+      "type": "file",
+      "description": "A file the user uploads; written into the container at targetDirectory/fileName.",
+      "isRequired": false,
+      "targetDirectory": "/App",
+      "fileName": "config.json"
     }
   ],
   "capabilities": ["tools", "resources"],

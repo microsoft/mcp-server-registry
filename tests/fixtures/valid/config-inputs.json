@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-config-inputs",
+  "name": "Config Inputs Server",
+  "description": "Valid manifest exercising every configuration input type.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test Publisher"
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/config@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  },
+  "configuration": [
+    {
+      "name": "LOG_LEVEL",
+      "type": "enum",
+      "description": "Logging verbosity.",
+      "allowedValues": ["debug", "info", "warn"],
+      "default": "info"
+    },
+    {
+      "name": "API_KEY",
+      "type": "secret",
+      "description": "Upstream API key.",
+      "isRequired": true
+    },
+    {
+      "name": "MAX_ITEMS",
+      "type": "int",
+      "description": "Maximum items per request.",
+      "default": "100"
+    },
+    {
+      "name": "ENABLE_CACHE",
+      "type": "bool",
+      "description": "Whether to enable response caching.",
+      "default": "true"
+    },
+    {
+      "name": "configFile",
+      "type": "file",
+      "description": "Server configuration file mounted into the container.",
+      "isRequired": true,
+      "targetDirectory": "/App",
+      "fileName": "config.json"
+    }
+  ]
+}

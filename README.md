@@ -101,8 +101,12 @@ The `source.transport` field declares how your server speaks MCP:
 
 ### Configuration & authentication
 
-- **`configuration[]`** declares the environment variables your server accepts,
-  each with a description. Mark sensitive values with `"isSecret": true`.
+- **`configuration[]`** declares the inputs your server accepts. Each input has a
+  `type` — modelled on an HTML `<input type>`: `string`, `secret`, `int`, `bool`,
+  and `enum` are collected in the portal and injected as **environment variables**
+  (named by `name`, UPPER_SNAKE_CASE), while a `file` input is written into the
+  container as a mounted file at `targetDirectory`/`fileName` (e.g. a config file).
+  Values are supplied by the user at deployment time — never commit them here.
 - **`authentication`** (optional) declares how your server authenticates to an
   upstream data source — a named connection string, managed identity, or both.
 

@@ -184,7 +184,7 @@
     },
     "configuration": {
       "type": "array",
-      "description": "Environment variables the server accepts. These become user-configurable settings in the Azure portal.",
+      "description": "Configuration inputs the server accepts. Each input is collected from the user in the Azure portal and delivered to the container either as an environment variable or, for 'file' inputs, as a file mounted inside the container. Values are supplied at deployment time and are never stored in this manifest.",
       "items": {
         "type": "object",
         "required": ["name", "description"],
@@ -192,9 +192,14 @@
         "properties": {
           "name": {
             "type": "string",
-            "pattern": "^[A-Z_][A-Z0-9_]*$",
-            "description": "Environment variable name (UPPER_SNAKE_CASE).",
-            "examples": ["DATABASE_CONNECTION_STRING", "API_KEY"]
+            "description": "Input identifier. For every type except 'file' this is the environment variable name (UPPER_SNAKE_CASE) the value is injected as; for 'file' inputs it is a logical identifier used in the portal.",
+            "examples": ["DATABASE_CONNECTION_STRING", "API_KEY", "configFile"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "secret", "int", "bool", "enum", "file"],
+            "default": "string",
+            "description": "Input type, modelled on an HTML <input type>. It drives both the portal widget (text box, masked field, number, toggle, dropdown, or file upload) and how the value reaches the container: 'file' is written as a mounted file (see targetDirectory and fileName); every other type is injected as the environment variable named by 'name'."
           },
           "description": {
             "type": "string",
@@ -204,24 +209,54 @@
           "isRequired": {
             "type": "boolean",
             "default": false,
-            "description": "Whether the server requires this variable to start."
-          },
-          "isSecret": {
-            "type": "boolean",
-            "default": false,
-            "description": "If true, the value is stored encrypted and masked in the portal."
+            "description": "Whether the server requires this input to start."
           },
           "default": {
             "type": "string",
-            "description": "Default value if the user does not provide one."
+            "description": "Default value applied when the user does not provide one. Not used for 'file' inputs."
           },
-          "format": {
+          "allowedValues": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "The permitted values, rendered as a dropdown in the portal. Required when type is 'enum'.",
+            "examples": [["development", "production"]]
+          },
+          "targetDirectory": {
             "type": "string",
-            "enum": ["string", "number", "boolean", "uri", "connection-string"],
-            "default": "string",
-            "description": "Value format hint for portal validation."
+            "pattern": "^/",
+            "description": "Absolute directory inside the container where the uploaded file is written. Required when type is 'file'.",
+            "examples": ["/App", "/etc/mcp"]
+          },
+          "fileName": {
+            "type": "string",
+            "description": "Name the uploaded file is given inside targetDirectory. Required when type is 'file'.",
+            "examples": ["dab-config.json", "config.yaml"]
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "file" } },
+              "required": ["type"]
+            },
+            "then": {
+              "required": ["targetDirectory", "fileName"],
+              "properties": { "name": { "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$" } }
+            },
+            "else": {
+              "properties": { "name": { "pattern": "^[A-Z_][A-Z0-9_]*$" } }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "enum" } },
+              "required": ["type"]
+            },
+            "then": { "required": ["allowedValues"] }
+          }
+        ]
       }
     },
     "capabilities": {

@@ -1,0 +1,24 @@
+{
+  "id": "mcp-bad-enum-input",
+  "name": "Bad Enum Input",
+  "description": "An enum configuration input missing the required allowedValues.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Test Publisher"
+  },
+  "links": {
+    "documentation": "https://example.com/docs"
+  },
+  "source": {
+    "type": "container",
+    "image": "ghcr.io/test/x@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "targetPort": 8080
+  },
+  "configuration": [
+    {
+      "name": "MODE",
+      "type": "enum",
+      "description": "Mode with no allowedValues."
+    }
+  ]
+}

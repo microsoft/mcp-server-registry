@@ -63,7 +63,65 @@ function Merge-FlattenedRequired {
     return $Schema
 }
 
-# Build a copy of the manifest schema with the source and authentication
+# Resolve the 'configuration' array to a positional tuple of concrete per-item
+# schemas. Each configuration input is discriminated by 'type': a 'file' input is
+# delivered as a mounted file (and requires targetDirectory + fileName), every
+# other type is delivered as an environment variable (whose 'name' must be a valid
+# UPPER_SNAKE_CASE variable), and an 'enum' input requires allowedValues. Baking
+# each item's requirements in up front - instead of leaving the value-dependent
+# if/then/else in items - means Test-Json evaluates one concrete shape per item and
+# reports only actionable errors, with no non-matching 'type' branch noise. This
+# mirrors the source discriminator resolution above.
+function Resolve-ConfigurationSchema {
+    param(
+        [Parameter(Mandatory)] $Schema,
+        [Parameter(Mandatory)] $Manifest
+    )
+    $hasConfig = ($Manifest.PSObject.Properties.Name -contains 'configuration') -and $Manifest.configuration
+    if (-not $hasConfig) { return $Schema }
+
+    $configProp = $Schema.properties.configuration
+    $baseItem = $configProp.items
+
+    $tuple = [System.Collections.Generic.List[object]]::new()
+    foreach ($item in @($Manifest.configuration)) {
+        # Deep-copy the base item schema, then strip the conditionals and fold this
+        # item's concrete requirements into a flat shape.
+        $resolved = $baseItem | ConvertTo-Json -Depth 100 | ConvertFrom-Json -Depth 100
+        if ($resolved.PSObject.Properties.Name -contains 'allOf') {
+            $resolved.PSObject.Properties.Remove('allOf')
+        }
+
+        $type = 'string'
+        if (($item.PSObject.Properties.Name -contains 'type') -and $item.type) {
+            $type = [string]$item.type
+        }
+
+        $required = [System.Collections.Generic.List[string]]::new()
+        foreach ($r in $resolved.required) { $required.Add([string]$r) }
+
+        if ($type -eq 'file') {
+            foreach ($r in 'targetDirectory', 'fileName') {
+                if (-not $required.Contains($r)) { $required.Add($r) }
+            }
+            $namePattern = '^[a-zA-Z][a-zA-Z0-9_-]*$'
+        } else {
+            $namePattern = '^[A-Z_][A-Z0-9_]*$'
+        }
+        if (($type -eq 'enum') -and -not $required.Contains('allowedValues')) {
+            $required.Add('allowedValues')
+        }
+
+        $resolved.required = [string[]]$required.ToArray()
+        $resolved.properties.name | Add-Member -NotePropertyName 'pattern' -NotePropertyValue $namePattern -Force
+
+        $tuple.Add($resolved)
+    }
+
+    $configProp.items = [object[]]$tuple.ToArray()
+    $configProp | Add-Member -NotePropertyName 'additionalItems' -NotePropertyValue $false -Force
+    return $Schema
+}
 # conditionals resolved for THIS manifest: the source discriminator is replaced by
 # the single matching definition (containerSource | githubSource), and the
 # value-dependent requirements (transport -> command|targetPort, auth methods ->
@@ -95,6 +153,10 @@ function Resolve-EffectiveSchema {
         $authExtra = if ($methods -contains 'connection-string') { @('connectionStringVariable') } else { @() }
         $schema.properties.authentication = Merge-FlattenedRequired -Schema $schema.properties.authentication -Extra $authExtra
     }
+
+    # configuration (optional): resolve the type-discriminated inputs to a concrete
+    # per-item tuple (env var vs file, enum requires allowedValues).
+    $schema = Resolve-ConfigurationSchema -Schema $schema -Manifest $Manifest
 
     return $schema
 }
