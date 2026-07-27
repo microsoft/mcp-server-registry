@@ -21,4 +21,9 @@ RUN chmod +x /App/entrypoint.sh
 
 EXPOSE 5000
 
+# Run as the non-root 'app' user (uid 1654) that the base image already
+# provides, rather than root. /App and its assemblies are world-readable, so no
+# ownership change is needed; the mounted dab-config.json is read-only at runtime.
+USER app
+
 ENTRYPOINT ["/App/entrypoint.sh"]
