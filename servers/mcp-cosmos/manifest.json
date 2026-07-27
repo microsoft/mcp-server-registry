@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-cosmos",
+  "name": "Cosmos DB MCP Server",
+  "description": "Enable AI agents to query and explore Azure Cosmos DB for NoSQL using Model Context Protocol.",
+  "version": "0.1.0",
+  "publisher": {
+    "name": "Microsoft"
+  },
+  "links": {
+    "documentation": "https://github.com/AzureCosmosDB/MCPToolKit/blob/main/README.md",
+    "source": "https://github.com/AzureCosmosDB/MCPToolKit",
+    "support": "https://github.com/AzureCosmosDB/MCPToolKit/issues",
+    "license": "https://github.com/AzureCosmosDB/MCPToolKit/blob/main/LICENSE"
+  },
+  "source": {
+    "type": "github",
+    "repo": "https://github.com/AzureCosmosDB/MCPToolKit",
+    "commit": "a4968a03c38f65a05395526cf13b7d85921c4ce0",
+    "dockerfile": "./Dockerfile",
+    "buildContext": ".",
+    "transport": "http",
+    "targetPort": 8080,
+    "mcpServerRoute": "/mcp"
+  },
+  "authentication": {
+    "methods": ["managed-identity", "connection-string"],
+    "default": "managed-identity",
+    "connectionStringVariable": "COSMOS_CONNECTION_STRING"
+  },
+  "configuration": [
+    {
+      "name": "COSMOS_ENDPOINT",
+      "type": "string",
+      "description": "Azure Cosmos DB for NoSQL account endpoint (e.g. https://<account>.documents.azure.com:443/). Required for the managed-identity path; omit when a connection string is supplied.",
+      "isRequired": false
+    }
+  ],
+  "capabilities": ["tools"],
+  "tags": ["cosmosdb", "nosql", "database", "azure"]
+}
