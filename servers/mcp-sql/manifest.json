@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-sql",
+  "name": "SQL MCP Server",
+  "description": "Enable AI agents to safely interact with SQL databases using Model Context Protocol.",
+  "version": "0.1.0",
+  "publisher": {
+    "name": "Microsoft"
+  },
+  "links": {
+    "documentation": "https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/overview",
+    "source": "https://github.com/Azure/data-api-builder",
+    "support": "https://github.com/Azure/data-api-builder/issues",
+    "license": "https://github.com/Azure/data-api-builder/blob/main/LICENSE.txt"
+  },
+  "source": {
+    "type": "local",
+    "dockerfile": "./Dockerfile",
+    "buildContext": ".",
+    "transport": "http",
+    "targetPort": 5000,
+    "mcpServerRoute": "/mcp"
+  },
+  "authentication": {
+    "methods": ["managed-identity", "connection-string"],
+    "default": "managed-identity",
+    "connectionStringVariable": "MSSQL_CONNECTION_STRING"
+  },
+  "configuration": [
+    {
+      "name": "configFile",
+      "type": "file",
+      "description": "Data API Builder configuration that defines the database entities exposed over MCP.",
+      "isRequired": true,
+      "targetDirectory": "/App",
+      "fileName": "dab-config.json"
+    }
+  ],
+  "capabilities": ["tools"],
+  "tags": ["sql", "database", "data-api-builder", "azure"]
+}
