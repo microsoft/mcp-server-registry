@@ -33,8 +33,8 @@
     {
       "name": "COSMOS_ENDPOINT",
       "type": "string",
-      "description": "Azure Cosmos DB for NoSQL account endpoint (e.g. https://<account>.documents.azure.com:443/) the server connects to using managed identity.",
-      "isRequired": true
+      "description": "Azure Cosmos DB for NoSQL account endpoint (e.g. https://<account>.documents.azure.com:443/). Required for the managed-identity path; omit when a connection string is supplied.",
+      "isRequired": false
     }
   ],
   "capabilities": ["tools"],
