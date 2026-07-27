@@ -3,7 +3,6 @@
   "id": "mcp-cosmos",
   "name": "Cosmos DB MCP Server",
   "description": "Enable AI agents to query and explore Azure Cosmos DB for NoSQL using Model Context Protocol.",
-  "longDescription": "The Cosmos DB MCP Server packages the [Azure Cosmos DB MCP Toolkit](https://github.com/AzureCosmosDB/MCPToolKit) and exposes an Azure Cosmos DB for NoSQL account over the Model Context Protocol, letting AI agents explore and query data through read-only tools: list databases and containers, infer a container's schema, read the most recent documents, find a document by id, and run property (text) search. Vector and hybrid search tools are also included and activate when an embeddings endpoint is configured.\n\nThe server connects to your Cosmos DB account using managed identity by default — set the account endpoint via the `COSMOS_ENDPOINT` environment variable and the Connector Namespace's managed identity is used to authenticate, so no secret is required. Alternatively, supply a connection string via the `COSMOS_CONNECTION_STRING` environment variable (see `authentication`), for example to target the Azure Cosmos DB emulator. No connection string value is stored in this manifest.",
   "version": "0.1.0",
   "publisher": {
     "name": "Microsoft"
