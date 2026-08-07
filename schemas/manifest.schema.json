@@ -317,8 +317,8 @@
         "mcpServerRoute": {
           "type": "string",
           "pattern": "^/",
-          "default": "/",
-          "description": "HTTP path prefix where the MCP SSE/Streamable HTTP endpoint is served. Ignored for stdio (the gateway sets route /mcp)."
+          "default": "/mcp",
+          "description": "HTTP path prefix where the MCP SSE/Streamable HTTP endpoint is served. Defaults to /mcp if omitted. Ignored for stdio (the gateway sets route /mcp)."
         }
       },
       "if": {
@@ -376,8 +376,8 @@
         "mcpServerRoute": {
           "type": "string",
           "pattern": "^/",
-          "default": "/",
-          "description": "HTTP path prefix where the MCP SSE/Streamable HTTP endpoint is served. Ignored for stdio (the gateway sets route /mcp)."
+          "default": "/mcp",
+          "description": "HTTP path prefix where the MCP SSE/Streamable HTTP endpoint is served. Defaults to /mcp if omitted. Ignored for stdio (the gateway sets route /mcp)."
         }
       },
       "if": {
@@ -423,8 +423,8 @@
         "mcpServerRoute": {
           "type": "string",
           "pattern": "^/",
-          "default": "/",
-          "description": "HTTP path prefix where the MCP SSE/Streamable HTTP endpoint is served. Ignored for stdio (the gateway sets route /mcp)."
+          "default": "/mcp",
+          "description": "HTTP path prefix where the MCP SSE/Streamable HTTP endpoint is served. Defaults to /mcp if omitted. Ignored for stdio (the gateway sets route /mcp)."
         }
       },
       "if": {
