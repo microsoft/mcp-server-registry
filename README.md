@@ -142,6 +142,21 @@ Requires [PowerShell 7.4+](https://learn.microsoft.com/en-us/powershell/scriptin
 
 ---
 
+## Additional terms and third-party servers
+
+Servers listed in this registry may be subject to their own terms, documentation,
+and notices. Before using a server, review the server's respective repository and
+any linked documentation for applicable terms and notices.
+
+The registry may also contain servers provided by third parties. If you choose to
+use a third-party server, you do so at your own risk. You are responsible for
+reviewing and complying with all terms, conditions, fees, and other charges
+associated with your use of the third-party server. Microsoft has no
+responsibility or liability to you or any other person in connection with your
+use of third-party servers.
+
+---
+
 ## Trademarks
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
