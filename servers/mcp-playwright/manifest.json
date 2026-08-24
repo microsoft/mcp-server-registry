@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/manifest.schema.json",
+  "id": "mcp-playwright",
+  "name": "Playwright MCP Server",
+  "description": "Enable AI agents to browse websites, interact with page elements, and capture screenshots using Playwright over Model Context Protocol.",
+  "version": "0.1.0",
+  "publisher": {
+    "name": "Microsoft"
+  },
+  "links": {
+    "documentation": "https://github.com/microsoft/playwright-mcp/blob/main/README.md",
+    "source": "https://github.com/microsoft/playwright-mcp",
+    "support": "https://github.com/microsoft/playwright-mcp/issues",
+    "license": "https://github.com/microsoft/playwright-mcp/blob/main/LICENSE"
+  },
+  "source": {
+    "type": "local",
+    "dockerfile": "./Dockerfile",
+    "buildContext": ".",
+    "transport": "http",
+    "targetPort": 8080,
+    "mcpServerRoute": "/mcp"
+  },
+  "capabilities": ["tools"],
+  "tags": ["playwright", "browser", "automation", "testing", "web"]
+}
