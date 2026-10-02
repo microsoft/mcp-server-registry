@@ -3,6 +3,7 @@
   "id": "mcp-sql",
   "name": "SQL MCP Server",
   "description": "Enable AI agents to safely interact with SQL databases using Model Context Protocol.",
+  "icon": "icon.svg",
   "version": "0.1.0",
   "publisher": {
     "name": "Microsoft"

@@ -3,6 +3,7 @@
   "id": "mcp-playwright",
   "name": "Playwright MCP Server",
   "description": "Enable AI agents to browse websites, interact with page elements, and capture screenshots using Playwright over Model Context Protocol.",
+  "icon": "icon.svg",
   "version": "0.1.0",
   "publisher": {
     "name": "Microsoft"

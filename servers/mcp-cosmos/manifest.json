@@ -3,6 +3,7 @@
   "id": "mcp-cosmos",
   "name": "Cosmos DB MCP Server",
   "description": "Enable AI agents to query and explore Azure Cosmos DB for NoSQL using Model Context Protocol.",
+  "icon": "icon.svg",
   "version": "0.1.0",
   "publisher": {
     "name": "Microsoft"
